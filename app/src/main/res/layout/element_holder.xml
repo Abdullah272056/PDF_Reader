@@ -8,6 +8,7 @@
     android:layout_marginRight="8dp"
     android:layout_marginLeft="8dp"
     app:cardCornerRadius="8dp"
+    android:id="@+id/container"
     >
     <LinearLayout
         android:orientation="vertical"
