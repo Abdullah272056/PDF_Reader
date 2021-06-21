@@ -17,6 +17,7 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.karumi.dexter.listener.single.PermissionListener;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -52,5 +53,22 @@ public class MainActivity extends AppCompatActivity {
             }
         }).check();
 
+    }
+
+    public ArrayList<File> findFile(File file){
+        ArrayList<File> arrayList=new ArrayList<>();
+        File[] files=file.listFiles();
+        for (File singleFile:files){
+            if (singleFile.isDirectory()&& singleFile.isHidden()){
+                arrayList.addAll(findFile(singleFile));
+
+            }else {
+                if (singleFile.getName().endsWith(".pdf")){
+                    arrayList.add(singleFile);
+                }
+
+            }
+        }
+        return arrayList;
     }
 }
