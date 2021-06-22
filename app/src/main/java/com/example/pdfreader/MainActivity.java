@@ -1,10 +1,12 @@
 package com.example.pdfreader;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.os.Bundle;
+import android.os.Environment;
 import android.widget.Toast;
 
 import com.karumi.dexter.Dexter;
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        runTimePermission();
     }
 
     private void runTimePermission(){
@@ -38,7 +41,12 @@ public class MainActivity extends AppCompatActivity {
                 ).withListener(new PermissionListener() {
             @Override
             public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
-           // displayPdf();
+
+                displayPdf();
+                Toast.makeText(MainActivity.this, "permission Granted", Toast.LENGTH_SHORT).show();
+                File file=  Environment.getExternalStorageDirectory();
+                findPdf(file);
+
             }
 
             @Override
@@ -55,12 +63,16 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public ArrayList<File> findFile(File file){
+
+
+    public ArrayList<File> findPdf(File file){
+
         ArrayList<File> arrayList=new ArrayList<>();
         File[] files=file.listFiles();
-        for (File singleFile:files){
-            if (singleFile.isDirectory()&& singleFile.isHidden()){
-                arrayList.addAll(findFile(singleFile));
+        assert files != null;
+        for (File singleFile: files ){
+            if (singleFile.isDirectory() && !singleFile.isHidden()){
+                arrayList.addAll(findPdf(singleFile));
 
             }else {
                 if (singleFile.getName().endsWith(".pdf")){
@@ -71,4 +83,16 @@ public class MainActivity extends AppCompatActivity {
         }
         return arrayList;
     }
+
+    private void displayPdf() {
+
+        recyclerView=findViewById(R.id.recyclerViewId);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new GridLayoutManager(this,2));
+       pdfList=new ArrayList<>();
+       pdfList.addAll(findPdf(Environment.getExternalStorageDirectory()));
+       pdfAdapter =new PdfAdapter(MainActivity.this,pdfList);
+       recyclerView.setAdapter(pdfAdapter);
+    }
+
 }
