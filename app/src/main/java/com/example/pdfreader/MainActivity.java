@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity implements OnPdfFileSelectLi
 
     @Override
     public void onPdfSelected(File file) {
-        startActivity(new Intent(MainActivity.this,DocumentActivity.class));
+        startActivity(new Intent(MainActivity.this,DocumentActivity.class)
+        .putExtra("path",file.getAbsolutePath()));
     }
 }

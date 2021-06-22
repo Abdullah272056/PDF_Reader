@@ -36,4 +36,8 @@ dependencies {
     // dexter library add for permission
     implementation 'com.karumi:dexter:6.2.2'
 
+
+    // pdf viewer
+    implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
+
 }
